@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="bgicoig.png" type="image/x-icon" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Presidencian" />
+    <title>Swipe of Answers</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/driver.js/dist/driver.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Itim&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,700,0,0"
+    />
+    <style>
+      .navbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60px;
+        background-color: transparent;
+        /* color: #B3D6DB; */
+        color: #ef3d4d;
+        padding: 0 20px;
+        font-weight: bolder;
+        text-align: center;
+        font-size: 28px;
+        flex-wrap: wrap;
+      }
+
+      .navbar h1 {
+        padding-top: 10px;
+        color: #ef3d4d;
+        font-family: "Comfortaa", cursive;
+        margin: 0;
+        font-weight: bolder;
+        width: 100%;
+        text-align: center;
+      }
+      @media screen and (max-width: 768px) {
+        .navbar {
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+          height: auto;
+          padding: 20px;
+          font-size: 30px;
+          text-align: left;
+        }
+      }
+
+      html,
+      body {
+        /* add background-color and background-image */
+        background: rgba(47, 84, 132, 0.9);
+        background-image: url(addbg.png);
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #board {
+        width: 100%;
+        height: 88%;
+        position: relative;
+        overflow: hidden;
+        /* background-color: rgb(245, 247, 250); */
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      @media only screen and (max-width: 720px) {
+        #board {
+          width: 100%;
+          height: 85%;
+        }
+        body {
+          /* position: fixed; */
+          width: 100%;
+          height: 90%;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .card {
+        width: 80%;
+        height: auto;
+        max-width: 456px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        border-radius: 12px;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.6);
+        background-color: #fedf4a;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        padding: 20px;
+        margin: auto;
+      }
+
+      .card p {
+        font-family: "Itim", cursive;
+        font-weight: 600;
+        color: black;
+        font-size: 26px;
+        line-height: 34px;
+        margin-top: 10px;
+      }
+
+      @media (max-width: 456px) {
+        .card {
+          width: 90%;
+          height: auto;
+        }
+      }
+
+      .new-post-button {
+        position: absolute;
+        bottom: 10px;
+        font-size: 32px;
+        left: 50%;
+        font-family: "Itim", cursive;
+        transform: translateX(-50%);
+        padding: 15px 123px;
+        background-color: #4681f4;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      @media screen and (max-width: 767px) {
+        .new-post-button {
+          position: relative;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          transform: none;
+          padding: 10px 20px;
+          margin-top: 20px;
+          text-align: center;
+        }
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      /* make it responsive using media queries*/
+
+      .modal-content {
+        width: 80%;
+        height: auto;
+        max-width: 456px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      @media (max-width: 456px) {
+        .modal-content {
+          width: 90%;
+          height: auto;
+        }
+      }
+      .modal-close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+      }
+      @media screen and (max-width: 767px) {
+        .modal-close-btn {
+          top: 10px;
+          right: 10px;
+        }
+      }
+      .modal-content textarea {
+        font-family: "Itim", cursive;
+        text-align: center;
+        width: 90%;
+        height: 300px;
+        margin-bottom: 20px;
+        resize: none;
+        font-size: 26px;
+        font-weight: 500;
+        padding: 20px;
+        border: 1px solid black;
+        border-radius: 10px;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content .submit-btn {
+        width: 40%;
+        padding: 20px 40px;
+        font-size: 18px;
+        margin: 20px auto;
+      }
+
+      .submit-btn {
+        display: block;
+        margin: -10px auto;
+        padding: 10px 20px;
+        background-color: #4681f4;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      @media only screen and (max-width: 767px) {
+        .submit-btn {
+          width: 80%;
+          margin: 10px auto;
+        }
+      }
+
+      @media only screen and (max-width: 480px) {
+        .submit-btn {
+          width: 100%;
+          margin: 20px auto;
+        }
+      }
+      @media only screen and (max-width: 1024px) {
+        .new-post-button {
+          right: 50px;
+          bottom: 10px;
+        }
+        .modal-content {
+          width: 60%;
+          height: 80%;
+        }
+        .modal-content textarea {
+          width: 80%;
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        .new-post-button {
+          right: 5px;
+          bottom: 5px;
+        }
+        .modal-content {
+          width: 80%;
+          height: 90%;
+        }
+        .modal-content textarea {
+          width: 70%;
+        }
+      }
+    </style>
+  </head>
+
+  <body oncontextmenu="return false;">
+    <div class="navbar">
+      <h1 class="titleName" style="cursor: pointer">SwipeFate</h1>
+    </div>
+    <div id="board"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
+
+    <script>
+      class Carousel {
+        constructor(element) {
+          this.board = element;
+
+          this.push();
+          this.push();
+
+          this.handle();
+        }
+
+        push() {
+          let card = document.createElement("div");
+          card.classList.add("card");
+
+          let randomText = this.getText();
+          if (randomText == "undefined") {
+            card.style.visibility = "hidden";
+          }
+          card.innerHTML = `<p>${randomText}</p>`;
+
+          this.board.appendChild(card);
+        }
+
+        handle() {
+          this.cards = this.board.querySelectorAll(".card");
+
+          this.topCard = this.cards[this.cards.length - 1];
+
+          this.nextCard = this.cards[this.cards.length - 2];
+
+          if (this.cards.length > 0) {
+            this.topCard.style.transform =
+              "translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(1)";
+
+            if (this.hammer) this.hammer.destroy();
+
+            this.hammer = new Hammer(this.topCard);
+            this.hammer.add(new Hammer.Tap());
+            this.hammer.add(
+              new Hammer.Pan({
+                position: Hammer.position_ALL,
+                threshold: 0,
+              })
+            );
+            this.hammer.on("tap", (e) => {
+              this.onTap(e);
+            });
+            this.hammer.on("pan", (e) => {
+              this.onPan(e);
+            });
+          }
+        }
+        onTap(e) {
+          let propX =
+            (e.center.x - e.target.getBoundingClientRect().left) /
+            e.target.clientWidth;
+          let rotateY = 15 * (propX < 0.05 ? -1 : 1);
+
+          this.topCard.style.transition = "transform 100ms ease-out";
+
+          this.topCard.style.transform =
+            "translateX(-50%) translateY(-50%) rotate(0deg) rotateY(" +
+            rotateY +
+            "deg) scale(1)";
+
+          setTimeout(() => {
+            this.topCard.style.transform =
+              "translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(1)";
+          }, 100);
+        }
+
+        onPan(e) {
+          if (!this.isPanning) {
+            this.isPanning = true;
+
+            this.topCard.style.transition = null;
+            if (this.nextCard) this.nextCard.style.transition = null;
+
+            let style = window.getComputedStyle(this.topCard);
+            let mx = style.transform.match(/^matrix\((.+)\)$/);
+            this.startPosX = mx ? parseFloat(mx[1].split(", ")[4]) : 0;
+            this.startPosY = mx ? parseFloat(mx[1].split(", ")[5]) : 0;
+
+            let bounds = this.topCard.getBoundingClientRect();
+
+            this.isDraggingFrom =
+              e.center.y - bounds.top > this.topCard.clientHeight / 2 ? -1 : 1;
+          }
+
+          let posX = e.deltaX + this.startPosX;
+          let posY = e.deltaY + this.startPosY;
+
+          let propX = e.deltaX / this.board.clientWidth;
+          let propY = e.deltaY / this.board.clientHeight;
+
+          let dirX = e.deltaX < 0 ? -1 : 1;
+
+          let deg = this.isDraggingFrom * dirX * Math.abs(propX) * 45;
+
+          let scale = (95 + 5 * Math.abs(propX)) / 100;
+
+          this.topCard.style.transform =
+            "translateX(" +
+            posX +
+            "px) translateY(" +
+            posY +
+            "px) rotate(" +
+            deg +
+            "deg) rotateY(0deg) scale(1)";
+
+          if (this.nextCard)
+            this.nextCard.style.transform =
+              "translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(" +
+              scale +
+              ")";
+
+          if (e.isFinal) {
+            this.isPanning = false;
+
+            let successful = false;
+
+            this.topCard.style.transition = "transform 200ms ease-out";
+            if (this.nextCard)
+              this.nextCard.style.transition = "transform 100ms linear";
+
+            if (propX > 0.25 && e.direction == Hammer.DIRECTION_RIGHT) {
+              successful = true;
+              posX = this.board.clientWidth;
+            } else if (propX < -0.25 && e.direction == Hammer.DIRECTION_LEFT) {
+              successful = true;
+              posX = -(this.board.clientWidth + this.topCard.clientWidth);
+            } else if (propY < -0.25 && e.direction == Hammer.DIRECTION_UP) {
+              successful = true;
+              posY = -(this.board.clientHeight + this.topCard.clientHeight);
+            }
+
+            if (successful) {
+              this.topCard.style.transform =
+                "translateX(" +
+                posX +
+                "px) translateY(" +
+                posY +
+                "px) rotate(" +
+                deg +
+                "deg)";
+
+              setTimeout(() => {
+                this.board.removeChild(this.topCard);
+                this.push();
+                this.handle();
+              }, 200);
+            } else {
+              this.topCard.style.transform =
+                "translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(1)";
+              if (this.nextCard)
+                this.nextCard.style.transform =
+                  "translateX(-50%) translateY(-50%) rotate(0deg) rotateY(0deg) scale(0.95)";
+            }
+          }
+        }
+        getText() {
+          if (!this.posts) {
+            this.posts = [
+              "Yes, absolutely.\n",
+              "No, definitely not.\n",
+              "Signs point to yes.\n",
+              "Outlook is not so good.\n",
+              "Most likely.\n",
+              "Very doubtful.\n",
+              "Yes, but with caution.\n",
+              "Absolutely not.\n",
+              "It is certain.\n",
+              "Don't count on it.\n",
+              "Yes, but not immediately.\n",
+              "My sources say no.\n",
+              "Without a doubt.\n",
+              "Better not to tell.\n",
+              "Cannot predict now.\n",
+              "Yes, but only with hard work and effort.\n",
+              "Very likely.\n",
+              "My reply is no.\n",
+              "Ask again later.\n",
+              "Yes, but only if you are true to yourself.\n",
+              "Outlook is good.\n",
+              "Don't hold your breath.\n",
+              "Yes, and it will be better than you expect.\n",
+              "Signs point to no.\n",
+              "My intuition says yes.\n",
+              "No, it's not the right time.\n",
+              "Yes, and it will be worth it.\n",
+              "It's possible, but not guaranteed.\n",
+              "Signs point to a positive outcome.\n",
+              "Don't make any major decisions right now.\n",
+              "Yes, but only if you take a risk.\n",
+              "My answer is unclear, try asking again.\n",
+              "No, and don't push it.\n",
+              "Yes, and it will come easily.\n",
+              "It's not looking good.\n",
+              "Keep an open mind and heart.\n",
+              "Yes, but only if you're patient.\n",
+              "The answer is within you.\n",
+              "No, it's not meant to be.\n",
+              "It's a possibility, but not a certainty.\n",
+              "Yes, and it will be life-changing.\n",
+              "You already know the answer.\n",
+              "My gut says no.\n",
+              "Don't rush into anything.\n",
+              "Yes, but it will take some work.\n",
+              "It's unclear at this time.\n",
+              "No, and it's for the best.\n",
+              "Yes, but only if you're honest.\n",
+              "The answer will reveal itself in time.\n",
+              "It's too soon to tell.\n",
+              "Yes, but don't get too attached to the outcome.\n",
+              "It's not looking promising.\n",
+              "Trust your instincts.\n",
+              "No, and don't dwell on it.\n",
+              "Yes, but be prepared for unexpected twists and turns.\n",
+              "It's possible, but you'll need to be flexible.\n",
+              "Ask again later, the timing isn't right.\n",
+              "Yes, but only if you're willing to compromise.\n",
+              "The universe is aligning in your favor.\n",
+              "Don't count on it, but keep an open mind.\n",
+              "Yes, and it will be a wild ride.\n",
+              "It's unlikely, but not impossible.\n",
+              "Follow your heart, not your head.\n",
+              "No, and don't force it.\n",
+              "Yes, but only if you're brave enough.\n",
+              "It's still too early to tell.\n",
+              "No, but don't be discouraged.\n",
+              "Yes, but it won't be easy.\n",
+              "Keep your expectations realistic.\n",
+              "It's not looking promising, but don't give up hope.\n",
+              "Yes, and it will be a journey of self-discovery.\n",
+              "It's complicated, but there's potential.\n",
+              "Trust the process.\n",
+              "No, and let it go.\n",
+              "Yes, but only if you have faith.\n",
+              "The answer is not what you expected.\n",
+              "Don't force the issue, let it unfold naturally.\n",
+              "Yes, but only if you stay true to yourself.\n",
+              "Keep your eyes and ears open for opportunities.\n",
+              "Follow your passion.\n",
+              "No, and don't look back.\n",
+              "Yes, and it will be an adventure.\n",
+              "It's not looking good, but don't lose hope.\n",
+              "Believe in yourself and your abilities.\n",
+              "Yes, but only if you're willing to learn from your mistakes.\n",
+              "The answer may surprise you.\n",
+              "It's a long shot, but worth a try.\n",
+              "Stay focused on your goals.\n",
+              "Yes, but only if you're willing to take a leap of faith.\n",
+              "It's not the right time, but don't give up.\n",
+              "Yes, and it will require courage.\n",
+              "It's possible, but you need to be patient.\n",
+              "No, and it's time to move on.\n",
+              "Yes, but be prepared for challenges.\n",
+              "It's unclear, but trust the journey.\n",
+              "Don't be afraid to take a chance.\n",
+              "Yes, but only if you're willing to let go of the past.\n",
+              "The answer is hidden, but it will be revealed.\n",
+              "Yes, and it will require persistence.\n",
+              "Don't underestimate your own strength.\n",
+              "It's possible, but you need to stay focused.\n",
+              "Yes, but only if you're true to yourself.\n",
+              "Trust the universe's plan for you.\n",
+              "No, and don't be afraid to try something new.\n",
+              "Yes, and it will be a lesson in patience.\n",
+              "Don't let fear hold you back.\n",
+              "It's possible, but you need to take action.\n",
+              "Yes, but only if you're willing to face your fears.\n",
+              "Stay open to new possibilities.\n",
+              "No, and it's time to move on to something better.\n",
+              "Yes, and it will be a test of your faith.\n",
+              "Trust that everything happens for a reason.\n",
+              "It's possible, but you need to take a leap of faith.\n",
+              "Yes, but be prepared to step outside your comfort zone.\n",
+              "Don't let doubt cloud your judgment.\n",
+              "It's possible, but you need to have confidence in yourself.\n",
+              "Yes, but only if you're willing to embrace change.\n",
+              "Trust that the right path will reveal itself.\n",
+              "No, and it's time to let go of what no longer serves you.\n",
+              "Yes, and it will require perseverance.\n",
+              "Don't let others' opinions sway your decision.\n",
+              "It's possible, but you need to be flexible.\n",
+              "Yes, but only if you're willing to take a risk.\n",
+              "Believe in your own abilities.\n",
+              "No, and it's time to move on to something greater.\n",
+              "Don't be afraid to ask for help.\n",
+              "It's possible, but you need to stay positive.\n",
+              "Yes, but only if you're willing to put in the effort.\n",
+              "Trust that the universe has a plan for you.\n",
+              "No, and it's time to focus on your own growth.\n",
+              "Yes, and it will require resilience.\n",
+              "Don't let setbacks discourage you.\n",
+              "It's possible, but you need to be patient and persistent.\n",
+              "Yes, but only if you're willing to let go of control.\n",
+              "Embrace the unknown with open arms.\n",
+              "No, and it's time to move on to greener pastures.\n",
+              "Yes, and it will be an adventure of a lifetime.\n",
+              "Trust your instincts and intuition.\n",
+              "It's possible, but you need to let go of fear.\n",
+              "Don't let negative self-talk hold you back.\n",
+              "No, and it's time to seek out a new path.\n",
+              "Yes, and it will be a journey of growth and transformation.\n",
+              "Stay focused on your own path, not others'.\n",
+              "It's possible, but you need to let go of attachment.\n",
+              "Trust that everything will work out in your favor.\n",
+              "No, and it's time to let go of your ego.\n",
+              "Yes, and it will require you to be true to yourself.\n",
+              "It's possible, but you need to trust in the journey.\n",
+              "Yes, but be prepared to face challenges head-on.\n",
+              "No, and it's time to focus on your own happiness.\n",
+              "Yes, and it will require you to take a risk.\n",
+              "Don't let fear hold you back from pursuing your dreams.\n",
+              "Trust that the universe has a plan for you, even if it's unclear.\n",
+              "It's possible, but you need to stay open-minded.\n",
+              "Stay true to yourself and your values.\n",
+              "No, and it's time to focus on your own growth and happiness.\n",
+              "Yes, and it will require you to be patient and persistent.\n",
+              "Trust that the universe is working in your favor, even if it doesn't seem like it.\n",
+              "It's possible, but you need to stay grounded and focused.\n",
+              "Yes, but be prepared to step out of your comfort zone.\n",
+              "Don't let doubt hold you back from pursuing your goals.\n",
+              "Trust that the right path will reveal itself in due time.\n",
+              "No, and it's time to let go of toxic people and situations.\n",
+              "Yes, and it will require you to have faith in yourself and your abilities.\n",
+              "Believe in the power of positive thinking.\n",
+              "It's possible, but you need to stay committed to your goals.\n",
+              "Yes, but only if you're willing to take responsibility for your actions.\n",
+              "Trust that everything happens for a reason, even if it's not immediately clear.\n",
+              "Yes, and it will require you to stay focused and disciplined.\n",
+              "Stay true to yourself, even in the face of adversity.\n",
+              "It's possible, but you need to stay true to your values and principles.\n",
+              "Yes, but be prepared to work hard and make sacrifices.\n",
+              "Trust that the universe is conspiring in your favor.\n",
+              "Yes, and it will require you to be persistent and resilient.\n",
+              "Stay open to new opportunities and experiences.\n",
+              "It's possible, but you need to stay true to your intuition.\n",
+              "Yes, but only if you're willing to take a chance and pursue your dreams.\n",
+              "Trust that the universe has a plan for you, even if it's not immediately clear.\n",
+              "No, and it's time to let go of the past and move forward.\n",
+              "Believe that you have the power to create your own reality.\n",
+              "It's possible, but you need to stay focused on your goals.\n",
+              "Yes, but be prepared to face obstacles and challenges.\n",
+              "Trust that the universe is guiding you towards your true path.\n",
+              "No, and it's time to let go of toxic relationships and situations.\n",
+              "Stay true to your values and principles, even when it's difficult.\n",
+              "It's possible, but you need to stay committed to your goals and aspirations.\n",
+              "Yes, but only if you're willing to take a leap\n",
+              "Trust that you are on the right path.\n",
+              "No, and it's time to let go of your fear of failure.\n",
+              "Yes, and it will require you to step out of your comfort zone.\n",
+              "Believe in the power of your own intuition.\n",
+              "It's possible, but you need to stay focused on the present moment.\n",
+              "Yes, but be prepared to face your fears head-on.\n",
+              "Don't let the opinions of others dictate your decisions.\n",
+              "Trust that everything will fall into place.\n",
+              "No, and it's time to let go of negative self-talk.\n",
+              "Yes, and it will require you to take a leap of faith.\n",
+              "Stay true to your values and principles, even in the face of adversity.\n",
+              "Yes, but only if you're willing to put in the work.\n",
+              "Believe in the power of positive thinking to manifest your desires.\n",
+              "No, and it's time to let go of the past and embrace the present.\n",
+              "Yes, and it will require you to be open to new experiences.\n",
+              "Stay true to yourself and your unique perspective.\n",
+              "It's possible, but you need to trust in the journey and embrace the unknown.\n",
+              "Yes, but be prepared to let go of what no longer serves you.\n",
+              "Don't let fear hold you back from pursuing your passions.\n",
+              "Trust that you have the power to create your own reality.\n",
+              "No, and it's time to let go of limiting beliefs about yourself.\n",
+              "Stay focused on your goals and stay true to your priorities.\n",
+              "It's possible, but you need to trust that the universe has a plan for you.\n",
+              "Yes, but only if you're willing to take calculated risks.\n",
+              "Believe that you have the power to overcome any obstacle.\n",
+              "No, and it's time to let go of toxic relationships.\n",
+              "Yes, and it will require you to stay true to your values.\n",
+              "Stay open to the guidance of the universe and your intuition.\n",
+              "It's possible, but you need to stay grounded in reality.\n",
+              "Yes, but be prepared to let go of your attachment to outcomes.\n",
+              "Trust that the universe will provide you with everything you need.\n",
+              "No, and it's time to let go of self-doubt.\n",
+              "Yes, and it will require you to be brave and take risks.\n",
+              "Stay true to yourself, even when others try to persuade you otherwise.\n",
+              "It's possible, but you need to trust in the process and stay patient.\n",
+              "Yes, but only if you're willing to let go of your resistance to change.\n",
+              "Believe that you have the power to create your own destiny.\n",
+              "Trust that the universe is working behind the scenes to manifest your desires.\n",
+              "No, and it's time to let go of your need for approval from others.\n",
+              "Yes, and it will require you to step into your power.\n",
+              "Stay true to your passions and stay aligned with your purpose.\n",
+              "It's possible, but you need to trust that you have the strength to overcome any challenge.\n",
+              "Yes, but be prepared to put in the hard work and dedication required.\n",
+              "Believe that everything is happening for your highest good.\n",
+              "No, and it's time to let go of attachment to material possessions.\n",
+              "Yes, and it will require you to have faith in the unknown.\n",
+              "Stay true to your inner voice, even in the face of external noise.\n",
+              "It's possible, but you need to stay present and grounded in the moment.\n",
+              "Yes, but be prepared to make sacrifices and face challenges.\n",
+              "Trust that the universe is unfolding exactly as it should.\n",
+              "No, and it's time to let go of toxic habits and behaviors.\n",
+              "Yes, and it will require you to step into your authenticity.\n",
+              "Believe that everything is working out in your favor, even if it doesn't seem like it.\n",
+              "Trust that you are exactly where you need to be on your journey.\n",
+              "It's possible, but you need to let go of the need for control and surrender to the flow.\n",
+              "Yes, but be prepared to face your fears and push past your limitations.\n",
+              "Stay true to your heart's desires, even if they go against societal norms.\n",
+              "Trust that the universe is conspiring in your favor, even if you can't see it yet.\n",
+              "No, and it's time to let go of the need for external validation.\n",
+              "Yes, and it will require you to embrace uncertainty and trust in the unknown.\n",
+              "Believe that you have the power to create the life you desire.\n",
+              "Trust that the answers you seek are already within you.\n",
+              "It's possible, but you need to stay committed to your vision and persevere through obstacles.\n",
+              "Yes, but be prepared to let go of limiting beliefs and old patterns.\n",
+              "Stay true to your values and beliefs, even when faced with opposition.\n",
+              "Trust that the universe is always providing you with opportunities for growth and expansion.\n",
+              "No, and it's time to let go of the need for external validation and approval.\n",
+              "Yes, and it will require you to trust in the journey and let go of the need for control.\n",
+              "Believe that you are worthy and deserving of all that you desire.\n",
+              "Trust that the universe is always guiding you towards your highest good.\n",
+              "It's possible, but you need to trust in your own abilities and have faith in the process.\n",
+              "Yes, but be prepared to step outside of your comfort zone and take risks.\n",
+              "Stay true to your intuition, even when it goes against logic.\n",
+              "Trust that the universe is always providing you with signs and synchronicities to guide you.\n",
+              "No, and it's time to let go of the need to please others at the expense of your own happiness.\n",
+              "Yes, and it will require you to be vulnerable and open to new experiences.\n",
+              "Believe that you are capable of achieving anything you set your mind to.\n",
+              "Trust that the universe is always providing you with the resources you need to succeed.\n",
+              "It's possible, but you need to stay committed to your goals and stay aligned with your purpose.\n",
+              "Yes, but be prepared to let go of your attachment to the outcome and trust in the journey.\n",
+              "Stay true to your authentic self and don't compromise your values for anyone.\n",
+              "Trust that everything is happening for a reason, even if you can't see it yet.\n",
+              "No, and it's time to let go of toxic relationships and negative influences.\n",
+              "Yes, and it will require you to trust in the power of manifestation and positive thinking.\n",
+              "Believe that the universe is always conspiring in your favor, even when things seem to be falling apart.\n",
+              "It's possible, but you need to let go of the past and embrace the present moment.\n",
+              "Yes, but be prepared to take responsibility for your actions and the consequences that follow.\n",
+              "Stay true to your inner purpose and don't let external distractions pull you off course.\n",
+              "No, and it's time to let go of old grudges and resentments.\n",
+              "Yes, and it will require you to have patience and trust in divine timing.\n",
+              "Believe that you have the power to overcome any obstacle that comes your way.\n",
+              "Trust that the answers you seek will come to you when you are ready to receive them.\n",
+              "It's possible, but you need to stay focused and disciplined in your actions.\n",
+              "Yes, but be prepared to let go of your attachment to specific outcomes and trust in the journey.\n",
+              "Stay true to your own values and beliefs, even if others try to sway you.\n",
+              "Trust that the universe is always providing you with exactly what you need in each moment.\n",
+              "No, and it's time to let go of the need to control every aspect of your life.\n",
+              "Yes, and it will require you to be open to new perspectives and ideas.\n",
+              "Believe that the universe is always guiding you towards your highest good, even if it doesn't feel like it in the moment.\n",
+              "Trust that you are exactly where you need to be on your journey, even if it's not where you thought you would be.\n",
+              "It's possible, but you need to let go of your fears and trust in your own abilities.\n",
+              "Yes, but be prepared to take risks and step outside of your comfort zone.\n",
+              "Stay true to your own unique path, even if it differs from the norm.\n",
+              "Trust that the universe is always providing you with the lessons and experiences you need for your growth and evolution.\n",
+              "No, and it's time to let go of the need for perfection and embrace your flaws and imperfections.\n",
+              "Yes, and it will require you to let go of your need for control and trust in the flow of life.\n",
+              "Believe that you are capable of handling anything that comes your way.\n",
+              "Trust that the universe is always working in your favor, even if it doesn't seem like it at first.\n",
+              "It's possible, but you need to trust in your own intuition and inner wisdom.\n",
+              "Yes, and it's time for you to step into your power and take control of your life.\n",
+              "No, and it's a sign that you need to take a step back and reassess your current situation.\n",
+              "Yes, but it will require you to let go of your attachment to the outcome and trust in the process.\n",
+              "No, and it's a reminder that sometimes the best course of action is to do nothing at all.\n",
+              "Yes, and it's a sign that you are ready to receive abundance and prosperity in your life.\n",
+              "No, and it's a sign that you need to confront your fears and face your challenges head on.\n",
+              "Yes, but it will require you to step outside of your comfort zone and embrace change.\n",
+              "No, and it's a sign that you need to let go of your need for control and surrender to the unknown.\n",
+              "Yes, and it's a sign that you are being guided towards your true purpose and calling.\n",
+              "No, and it's a reminder to stay grounded and connected to your roots.\n",
+              "Yes, but it will require you to let go of your ego and embrace humility and compassion.\n",
+              "No, and it's a sign that you need to let go of your past mistakes and forgive yourself for any wrongdoings.\n",
+              "Absolutely, and pigs will fly tomorrow!\n",
+              "Yes, but only if you can convince a unicorn to grant your wish.\n",
+              "No way, Jose! Unless you have a time machine, then maybe.\n",
+              "Yes, and I hear the winning lottery numbers are written on the back of a napkin at your local diner.\n",
+              "No, and you're better off asking a Magic 8-ball for advice.\n",
+              "Yes, but only if you're willing to make a deal with the devil.\n",
+              "Yes, but only if you sacrifice a goat under the full moon.\n",
+              "No, and your chances of success are about as likely as finding a needle in a haystack.\n",
+              "Yes, but only if you can solve a Rubik's cube blindfolded while standing on one foot.\n",
+              "Yes, but remember that the future is not set in stone, and your actions and decisions can shape and change your destiny. So, choose wisely and trust in your ability to create the reality you desire.\n",
+            ];
+          }
+
+          const randomIndex = Math.floor(Math.random() * this.posts.length);
+          return this.posts[randomIndex];
+        }
+
+        getRotationAngle(x, y) {
+          return x / 10;
+        }
+
+        getYDegree(x, y, angle) {
+          return (x / 10) * Math.abs(Math.sin(angle));
+        }
+
+        getScale(x) {
+          return 1 + (x / this.board.offsetWidth) * 0.05;
+        }
+      }
+
+      let carousel = new Carousel(document.querySelector("#board"));
+
+      getText();
+    </script>
+  </body>
+</html>
